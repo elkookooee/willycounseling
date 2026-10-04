@@ -268,6 +268,45 @@ p { color: var(--mid); }
 .ins-footer-note { text-align: center; font-size: 0.88rem; color: var(--mid); }
 .ins-footer-note a { color: var(--sage-dark); text-decoration: underline; }
 
+/* TOOLS */
+.tools { background: var(--cream); }
+.breathing-tool {
+  max-width: 780px; margin: 0 auto; padding: 36px;
+  background: var(--warm-white); border: 1.5px solid var(--tan); border-radius: 24px;
+  box-shadow: var(--shadow);
+}
+.breathing-modes { display: flex; justify-content: center; gap: 12px; margin-bottom: 28px; }
+.breathing-mode {
+  padding: 11px 20px; border: 1.5px solid var(--tan); border-radius: 50px;
+  background: var(--warm-white); color: var(--mid); font: 600 0.88rem var(--font-sans);
+  cursor: pointer; transition: background var(--t), color var(--t), border-color var(--t);
+}
+.breathing-mode[aria-selected="true"] { background: var(--sage-dark); border-color: var(--sage-dark); color: #fff; }
+.breathing-mode:focus-visible, .breathing-controls button:focus-visible { outline: 3px solid var(--sage-light); outline-offset: 3px; }
+.breathing-stage { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.breathing-visual {
+  width: 220px; height: 220px; display: grid; place-items: center; margin: 8px 0 24px;
+}
+.breathing-shape {
+  width: 176px; height: 176px; display: grid; place-items: center;
+  border: 2px solid var(--sage-light); border-radius: 16px;
+  background: rgba(122,158,135,0.08);
+}
+.breathing-shape.is-478 { border-radius: 50%; }
+.breathing-core {
+  width: 100%; height: 100%; display: grid; place-items: center;
+  border-radius: inherit; background: rgba(122,158,135,0.28);
+  transform: scale(.72); transition: transform 4s linear;
+}
+.breathing-core.inhale, .breathing-core.hold-full { transform: scale(1); }
+.breathing-instruction { min-height: 2rem; color: var(--sage-dark); font: 600 1.3rem var(--font-serif); }
+.breathing-count { min-height: 1.8rem; color: var(--mid); font-size: 1rem; font-variant-numeric: tabular-nums; }
+.breathing-elapsed { margin-top: 8px; color: var(--light); font-size: 0.82rem; font-variant-numeric: tabular-nums; }
+.breathing-controls { display: flex; justify-content: center; gap: 12px; margin-top: 24px; }
+.breathing-controls button { min-width: 112px; justify-content: center; }
+.breathing-controls button:disabled { opacity: 0.55; cursor: not-allowed; }
+.breathing-note { max-width: 570px; margin: 24px auto 0; text-align: center; font-size: 0.85rem; }
+
 /* CTA BAND */
 .cta-band { background: linear-gradient(135deg, var(--sage-dark), var(--sage)); padding-block: 88px; text-align: center; }
 .cta-band h2 { color: #fff; margin-bottom: 12px; }
@@ -341,6 +380,12 @@ select { appearance: none; cursor: pointer; }
   .contact-form { padding: 28px 20px; }
   .form-row { grid-template-columns: 1fr; }
   .hero-scroll-hint { display: none; }
+  .breathing-tool { padding: 28px 18px; }
+  .breathing-modes { gap: 8px; }
+  .breathing-mode { padding: 10px 14px; font-size: 0.82rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .breathing-core { transition: none; }
 }
 
 /* HERO TREE SKETCH */
@@ -371,9 +416,10 @@ select { appearance: none; cursor: pointer; }
       <a href="#about">About</a>
       <a href="#approach">Approach</a>
       <a href="#services">Services</a>
+      <a href="#tools">Tools</a>
       <a href="https://care.headway.co/providers/cecilia-williams-2" target="_blank" rel="noopener" class="btn-nav">Book an Appointment</a>
     </nav>
-    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -542,6 +588,38 @@ select { appearance: none; cursor: pointer; }
   </div>
 </section>
 
+<!-- TOOLS -->
+<section class="tools section" id="tools">
+  <div class="container">
+    <div class="section-header fade-up">
+      <p class="section-label">A Moment for You</p>
+      <h2>Guided Breathing</h2>
+      <p class="section-desc">Choose a gentle pace and let the animation guide each breath.</p>
+    </div>
+    <div class="breathing-tool fade-up">
+      <div class="breathing-modes" role="tablist" aria-label="Breathing pattern">
+        <button class="breathing-mode" id="mode-box" type="button" role="tab" aria-selected="true" aria-controls="breathing-panel" data-pattern="box">Box breathing</button>
+        <button class="breathing-mode" id="mode-478" type="button" role="tab" aria-selected="false" aria-controls="breathing-panel" data-pattern="478" tabindex="-1">4-7-8 breathing</button>
+      </div>
+      <div class="breathing-stage" id="breathing-panel" role="tabpanel" aria-labelledby="mode-box">
+        <div class="breathing-visual" aria-hidden="true">
+          <div class="breathing-shape" id="breathing-shape">
+            <div class="breathing-core" id="breathing-core"></div>
+          </div>
+        </div>
+        <p class="breathing-instruction" id="breathing-instruction" aria-live="polite">Ready when you are</p>
+        <p class="breathing-count" id="breathing-count">Choose a pattern, then begin</p>
+        <p class="breathing-elapsed" id="breathing-elapsed">0:00 · 0 cycles</p>
+      </div>
+      <div class="breathing-controls">
+        <button class="btn-primary" id="breathing-start" type="button">Begin</button>
+        <button class="btn-primary" id="breathing-reset" type="button" disabled>Reset</button>
+      </div>
+      <p class="breathing-note">Follow at a comfortable pace, without straining. If you feel dizzy or uncomfortable, stop and return to your natural breathing.</p>
+    </div>
+  </div>
+</section>
+
 <!-- CTA BAND -->
 <section class="cta-band">
   <div class="container">
@@ -640,6 +718,7 @@ select { appearance: none; cursor: pointer; }
       <a href="#about">About</a>
       <a href="#approach">Approach</a>
       <a href="#services">Services</a>
+      <a href="#tools">Tools</a>
       <a href="#contact">Contact</a>
     </div>
     <div class="footer-contact">
@@ -730,8 +809,158 @@ window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.
 
 const toggle = document.getElementById('nav-toggle');
 const links = document.getElementById('nav-links');
-toggle.addEventListener('click', () => links.classList.toggle('open'));
-links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+toggle.addEventListener('click', () => {
+  const isOpen = links.classList.toggle('open');
+  toggle.setAttribute('aria-expanded', String(isOpen));
+});
+links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  links.classList.remove('open');
+  toggle.setAttribute('aria-expanded', 'false');
+}));
+
+const breathingPatterns = {
+  box: [
+    { instruction: 'Breathe in', seconds: 4, visual: 'inhale' },
+    { instruction: 'Hold', seconds: 4, visual: 'hold-full' },
+    { instruction: 'Breathe out', seconds: 4, visual: 'exhale' },
+    { instruction: 'Hold', seconds: 4, visual: 'hold-rest' }
+  ],
+  '478': [
+    { instruction: 'Breathe in', seconds: 4, visual: 'inhale' },
+    { instruction: 'Hold', seconds: 7, visual: 'hold-full' },
+    { instruction: 'Breathe out', seconds: 8, visual: 'exhale' }
+  ]
+};
+const breathingTabs = [...document.querySelectorAll('.breathing-mode')];
+const breathingShape = document.getElementById('breathing-shape');
+const breathingCore = document.getElementById('breathing-core');
+const breathingInstruction = document.getElementById('breathing-instruction');
+const breathingCount = document.getElementById('breathing-count');
+const breathingElapsed = document.getElementById('breathing-elapsed');
+const breathingStart = document.getElementById('breathing-start');
+const breathingReset = document.getElementById('breathing-reset');
+const breathingPanel = document.getElementById('breathing-panel');
+let breathingPattern = 'box';
+let breathingPhase = 0;
+let phaseEndsAt = 0;
+let phaseRemaining = breathingPatterns.box[0].seconds * 1000;
+let elapsedBeforeRun = 0;
+let runStartedAt = 0;
+let cyclesCompleted = 0;
+let breathingInterval = null;
+let breathingRunning = false;
+
+function setBreathingVisual(phase) {
+  breathingCore.classList.remove('inhale', 'hold-full', 'hold-rest');
+  breathingCore.classList.add(phase.visual);
+  breathingCore.style.transitionDuration = `${phase.seconds}s`;
+}
+
+function formatElapsed(milliseconds) {
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  return `${Math.floor(totalSeconds / 60)}:${String(totalSeconds % 60).padStart(2, '0')}`;
+}
+
+function renderBreathingTick(now) {
+  const phases = breathingPatterns[breathingPattern];
+  while (now >= phaseEndsAt) {
+    breathingPhase = (breathingPhase + 1) % phases.length;
+    if (breathingPhase === 0) cyclesCompleted += 1;
+    phaseEndsAt += phases[breathingPhase].seconds * 1000;
+    setBreathingVisual(phases[breathingPhase]);
+    breathingInstruction.textContent = phases[breathingPhase].instruction;
+  }
+  breathingCount.textContent = `${Math.ceil(Math.max(0, phaseEndsAt - now) / 1000)} seconds`;
+  breathingElapsed.textContent = `${formatElapsed(elapsedBeforeRun + now - runStartedAt)} · ${cyclesCompleted} ${cyclesCompleted === 1 ? 'cycle' : 'cycles'}`;
+}
+
+function startBreathing() {
+  const now = Date.now();
+  breathingRunning = true;
+  phaseEndsAt = now + phaseRemaining;
+  runStartedAt = now;
+  breathingStart.textContent = 'Pause';
+  breathingReset.disabled = false;
+
+  const phase = breathingPatterns[breathingPattern][breathingPhase];
+  const frozenTransform = breathingCore.style.transform;
+  if (frozenTransform) {
+    breathingCore.style.transition = 'none';
+    breathingCore.classList.remove('inhale', 'hold-full', 'hold-rest');
+    breathingCore.style.transform = frozenTransform;
+    void breathingCore.offsetWidth;
+    breathingCore.style.transition = '';
+    breathingCore.style.transform = '';
+    void breathingCore.offsetWidth;
+  }
+  setBreathingVisual({ ...phase, seconds: phaseRemaining / 1000 });
+  breathingInstruction.textContent = phase.instruction;
+  breathingInterval = setInterval(() => renderBreathingTick(Date.now()), 200);
+  renderBreathingTick(now);
+}
+
+function pauseBreathing() {
+  const now = Date.now();
+  phaseRemaining = Math.max(0, phaseEndsAt - now);
+  elapsedBeforeRun += now - runStartedAt;
+  breathingRunning = false;
+  clearInterval(breathingInterval);
+  breathingInterval = null;
+  breathingCore.style.transform = getComputedStyle(breathingCore).transform;
+  breathingCore.style.transition = 'none';
+  breathingStart.textContent = 'Resume';
+  breathingElapsed.textContent = `${formatElapsed(elapsedBeforeRun)} · ${cyclesCompleted} ${cyclesCompleted === 1 ? 'cycle' : 'cycles'}`;
+}
+
+function resetBreathing() {
+  breathingRunning = false;
+  clearInterval(breathingInterval);
+  breathingInterval = null;
+  breathingPhase = 0;
+  phaseRemaining = breathingPatterns[breathingPattern][0].seconds * 1000;
+  elapsedBeforeRun = 0;
+  cyclesCompleted = 0;
+  breathingCore.style.transform = '';
+  breathingCore.style.transition = '';
+  breathingCore.classList.remove('inhale', 'hold-full', 'hold-rest');
+  breathingInstruction.textContent = 'Ready when you are';
+  breathingCount.textContent = 'Choose a pattern, then begin';
+  breathingElapsed.textContent = '0:00 · 0 cycles';
+  breathingStart.textContent = 'Begin';
+  breathingReset.disabled = true;
+  breathingStart.disabled = false;
+}
+
+breathingTabs.forEach((tab, index) => {
+  tab.addEventListener('click', () => {
+    breathingPattern = tab.dataset.pattern;
+    breathingTabs.forEach(item => {
+      const selected = item === tab;
+      item.setAttribute('aria-selected', String(selected));
+      item.tabIndex = selected ? 0 : -1;
+    });
+    breathingShape.classList.toggle('is-478', breathingPattern === '478');
+    breathingPanel.setAttribute('aria-labelledby', tab.id);
+    resetBreathing();
+  });
+  tab.addEventListener('keydown', event => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    const nextIndex = event.key === 'Home' ? 0
+      : event.key === 'End' ? breathingTabs.length - 1
+      : (index + (event.key === 'ArrowRight' ? 1 : -1) + breathingTabs.length) % breathingTabs.length;
+    breathingTabs[nextIndex].focus();
+    breathingTabs[nextIndex].click();
+  });
+});
+breathingStart.addEventListener('click', () => {
+  if (breathingRunning) {
+    pauseBreathing();
+  } else {
+    startBreathing();
+  }
+});
+breathingReset.addEventListener('click', resetBreathing);
 
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
